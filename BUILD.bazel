@@ -152,8 +152,17 @@ cc_library(
         [
             "src/**/*.cpp",
         ],
-        exclude = ["src/main.cpp"],
-    ),
+        exclude = [
+            "src/main.cpp",
+            "src/platform/camera/v4l2.cpp",
+            "src/platform/camera/directshow.cpp",
+            "src/platform/install_osx.cpp",
+        ],
+    ) + select({
+        "//tools/config:freebsd": ["src/platform/camera/v4l2.cpp"],
+        "//tools/config:linux": ["src/platform/camera/v4l2.cpp"],
+        "//tools/config:osx": ["src/platform/install_osx.cpp"],
+    }),
     hdrs = glob(["src/**/*.h"]),
     copts = select({
         "//tools/config:freebsd": [],
